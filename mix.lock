@@ -1,0 +1,4 @@
+%{
+  "lifx": {:git, "git://github.com/brianmay/lifx.git", "ca7316829936e7931d34b98cc8a50bdede5e5592", []},
+  "plug": {:git, "git://github.com/brianmay/lifx.git", "ca7316829936e7931d34b98cc8a50bdede5e5592", []},
+}
