@@ -1,21 +1,17 @@
 # Lighting Tools
 
-**TODO: Add description**
+Tools for controlling smart lighting using elixir  
+So far, only Lifx devices and simple automated control of light temperature are supported
 
-## Installation
+## Temperature Control 
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `smartbulb2` to your list of dependencies in `mix.exs`:
+Tool to automatically vary the colour temperature of a smart bulb throughout the day. 
+Run using 
+```
+Lighting_Tools.loop(device, -1)
+```
+Where device corresponds to the desired smart bulb.
 
-#```elixir
-#def deps do
-#  [
-#    {:smartbulb2, "~> 0.1.0"}
-#  ]
-#end
-#```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/smartbulb2](https://hexdocs.pm/smartbulb2).
-
+The light temperature decreases from 4500K (neutral/cool white) at 08:00 to 2500K (very warm white/candlelight) at 21:00.
+Hue, Brightness and Saturation are not affected.
+Currently assumes the user is in the UTC±00:00 timezone.
