@@ -14,19 +14,25 @@ defmodule Lighting_Tools.Temperature do
 #    end)
 #  end
 
-#  def interpolate([head|tail], x) do
-#    cond do
-#      elem(head, 0) >= x -> elem(head, 1)
-  #
-#      length(tail) = 1 ->
-  #
-#      elem(hd(tail)) > x ->
-#        {x1, y1} = tail
-#        {x2, y2} = head
-#        {:halt, y1+(x-x1)*(y1-y2)/(x1-x2)}
+  def interpolate(x,points) do
+    {xs,ys}=points |> Enum.sort |> Enum.unzip
+    do_interpolate(xs,ys,x)
+  end
 
-  #    end
-#  end
+  def do_interpolate([hx|tx],[hy|ty], x) do
+    cond do
+      length(tx)==0 ->
+        hy
+      hx > x ->
+        hy
+      tx |> hd > x ->
+        x2 = tx |> hd
+        y2 = ty |> hd
+        hy+(x-hx)*(hy-y2)/(hx-x2)
+      true ->
+        do_interpolate(tx,ty,x)
+      end
+  end
 
 
   def placeholder_temp(time) do
@@ -39,5 +45,17 @@ defmodule Lighting_Tools.Temperature do
         2500
     end
   end
+  
+  def temperature_wrapper() do
+    temp=Time.utc_now|>placeholder_temp
+    %Lifx.Protocol.HSBK{hue: -1, saturation: -1, brightness: -1, kelvin: temp}
+  end
+
+  def temperature(points \\ [{6,2500},{6.1,4500},{21,2500}]) do
+    temp=(Time.utc_now.hour+ Time.utc_now.minute / 60+ Time.utc_now.second / 3600) |> interpolate(points) |> round
+    %Lifx.Protocol.HSBK{hue: -1, saturation: -1, brightness: -1, kelvin: temp}
+  end
+
+
 end
 
